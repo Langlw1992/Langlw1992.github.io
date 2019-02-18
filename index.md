@@ -3,7 +3,7 @@
 > Jest是一个Javascript测试框架，由Facebook开源，致力于简化测试，降低前端测试成本，已被`create-react-app`、`@vue/cli`等脚手架工具默认集成。Jest主打开箱即用、快照功能、独立并行测试以及良好的文档和Api.
 
 #### 安装
-```sh
+```bash
 //#初始化一个项目
 mkdir jest-test&&cd jest-test
 yarn init -y
@@ -45,7 +45,7 @@ expect(sum(1,2)).toBe(3)
 > If you're using ES module imports then you'll normally be inclined to put your import statements at the top of the test file. But often you need to instruct Jest to use a mock before modules use it. For this reason, Jest will automatically hoist jest.mock calls to the top of the module (before any imports). To learn more about this and see it in action, see this repo.
 > 
 Jest运行基于node，而至今`ES Module`仍然是Experimental支持。。。
-```sh
+```bash
 #利用babel将代码转译为es5
 yarn add -D babel-jest @babel/core @babel/preset-env
 
@@ -140,7 +140,7 @@ Jest提供了`beforeEach`、`afterEach`、`beforeAll`、`afterAll`等钩子，�
 ```
     
 输出测试结果
-```sh
+```bash
 PASS  ./index.test.js
       ✓ test sum (5ms)
       ✓ test co (2ms)
