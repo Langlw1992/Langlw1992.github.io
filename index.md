@@ -31,14 +31,13 @@ expect(sum(1,2)).toBe(3)
 })
 ```
 运行 `yarn test`
-
     翻车了。。。
-    
-    ● Test suite failed to run
-        Jest encountered an unexpected token
-        This usually means that you are trying to import a file which Jest cannot parse, e.g. it's not plain JavaScript.
-        ...
-        
+```
+● Test suite failed to run
+    Jest encountered an unexpected token
+    This usually means that you are trying to import a file which Jest cannot parse, e.g. it's not plain JavaScript.
+    ...
+```  
 再去翻文档
 
 > ### Using with ES module imports
