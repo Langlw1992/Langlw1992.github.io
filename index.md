@@ -44,6 +44,8 @@ expect(sum(1,2)).toBe(3)
 > If you're using ES module imports then you'll normally be inclined to put your import statements at the top of the test file. But often you need to instruct Jest to use a mock before modules use it. For this reason, Jest will automatically hoist jest.mock calls to the top of the module (before any imports). To learn more about this and see it in action, see this repo.
 > 
 Jest运行基于node，而至今`ES Module`仍然是Experimental支持。。。
+
+
 ```
 #利用babel将代码转译为es5
 yarn add -D babel-jest @babel/core @babel/preset-env
@@ -62,6 +64,7 @@ yarn add -D babel-jest @babel/core @babel/preset-env
   ]
 }
 ```
+
 再次运行`yarn test`
 ```bash
     #通过测试
