@@ -1,0 +1,47 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@media (orientation: portrait) {
+
+}
+
+html {
+    font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background: #159957 linear-gradient(120deg, #155799, #159957);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: blur(.7);
+}
+
+.ctn {
+    width: 1200px;
+    height: 600px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+}
+
+.ctn .half {
+    flex: 1;
+    height: 100%;
+}
+
+.ctn > .left {
+    background-color: lightgray;
+}
+
+.ctn > .right {
+    background-color: lightblue;
+}
