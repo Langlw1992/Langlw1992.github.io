@@ -20,8 +20,8 @@ yarn add -D jest
 #### 编写测试
 
 ```javascript
-// 新建一个目标文件 index.js
-export function sum(a, b) {
+index.ts
+expindex.tstion sum(a, b) {
       return a + b;
 }
 //新建测试文件 index.test.js
