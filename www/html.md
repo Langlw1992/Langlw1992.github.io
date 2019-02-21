@@ -60,6 +60,8 @@
     </script>
     ``` 
     ![cors image in canvas](http://albumlang.oss-cn-hangzhou.aliyuncs.com/test/20190221155440.png)
+    
+    
 - `rel`: 申明链接和当前文档的关系，为一个链接属性列表：
     - alternate 可选类型
 
