@@ -12,12 +12,14 @@
 <body>
 <canvas id="canvas" width="500px" height="300px">your browser not support canvas</canvas>
 <script>
-  const image = new Image()
-  image.onload = function() {
-    const context = document.querySelector('#canvas').getContext('2d')
-    context.drawImage(this, 0, 0, 500, 300)
-  }
-  image.src = 'https://albumlang.oss-cn-hangzhou.aliyuncs.com/test/radeon.jpg'
+  setTimeout(() => {
+    const image = new Image()
+    image.onload = function() {
+      const context = document.querySelector('#canvas').getContext('2d')
+      context.drawImage(this, 0, 0, 500, 300)
+    }
+    image.src = 'https://albumlang.oss-cn-hangzhou.aliyuncs.com/test/radeon.jpg'
+  }, 3000)
 </script>
 </body>
 </html>
