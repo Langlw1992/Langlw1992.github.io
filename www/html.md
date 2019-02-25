@@ -114,5 +114,46 @@ JavaScript或GLSL WebGL编程语言标签
 当浏览器的JavaScript被禁用时呈现的内容
 
 #### body
+文档内容载体，文档中只能存在一个body
+
+- `onhashchange`  hash值变动时触发
+
+    ```html
+    <body onhashchange="console.log('hash changed')">
+      <script>window.location.hash = 'dick'</script>
+    </body>
+    ```
+- `onload`  当文档载入完成时触发，需要页面所有的资源加载完成(图片、script等)
+- `onmessage`  当文档收到信息时 //TODO
+- `online`  联网失败触发
+- `onoffline`  联网成功触发
+- `onpopstate`  当页面`history`变动时触发
+    ```html
+    <body onpopstate="console.log('popstate trigger')">
+        <script>
+          /** history.pushState接收三个参数:
+              1.state object 
+              2.title
+              3.URL
+          **/
+          history.pushState({page: 1}, "title 1", "?page=1");
+        </script>
+    </body>
+    // 当页面返回到该页面时，触发popstate事件
+    ```
+#### 常规元素
+`header`、`footer`、`aside`、`main`、`section`等容器元素
+#### `<a/>`
+超链接
+- `dowmload`  构建下载，如果有value,则将其作为保存文件的预设的名字。`download`只有在`href`为同源下有效
+- `href`  链接的目标位置，包含url、hash(页面内某个元素id)
+- `hreflang`  指定目标的人类语言类型
+- `ping`  当点击标签时，会ping一次目标地址,value为指定的url，ping不会接受响应
+- `referrerpolicy`  指定请求的referrer
+    - `no-referrer`  请求中不出现`Referrer` header
+    - `no-referrer-when-downgrade`  当请求为非https时，请求中不出现`Referrer` header
+    - `origin`  发送`Referrer` header
+    - `origin-when-cross-origin`  当跨域时不发送`Referrer` header
+    - `strict-origin-when-cross-origin` mdn未标明
 
 #### properties
