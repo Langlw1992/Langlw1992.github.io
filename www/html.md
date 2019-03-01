@@ -1,15 +1,22 @@
-## HTML 拾遗
+## HTML标签拾遗
 
 #### 基本标签
 
-- [html](#html)
+- [html](#doctype)
     - [head](#head)
-    - [meta](#meta)
-    - [link](#link)
-    - [style](#style)
-    - [script](#script)
-    - title 即页面标题
+        - [meta](#meta)
+        - [link](#link)
+        - [style](#style)
+        - [script](#script)
+        - title 即页面标题
     - [body](#body)
+        - [常规元素](#常规元素)
+        - [a标签](#anchor)
+        - [img](#图片)
+        - [audio](#audio)
+        - [video](#video)
+        - [iframe](#iframe)
+        - [canvas](#canvas)
 - [全局属性](#properties)
     
 #### doctype
@@ -143,7 +150,7 @@ JavaScript或GLSL WebGL编程语言标签
     ```
 #### 常规元素
 `header`、`footer`、`aside`、`main`、`section`等容器元素
-#### `<a/>`
+#### anchor
 超链接
 - `dowmload`  构建下载，如果有value,则将其作为保存文件的预设的名字。`download`只有在`href`为同源下有效
 - `href`  链接的目标位置，包含url、hash(页面内某个元素id)
@@ -155,5 +162,209 @@ JavaScript或GLSL WebGL编程语言标签
     - `origin`  发送`Referrer` header
     - `origin-when-cross-origin`  当跨域时不发送`Referrer` header
     - `strict-origin-when-cross-origin` mdn未标明
+- `rel`  同`link -rel`
+- `target`  指定目标资源的显示位置，当使用该属性时，设置`rel="referrer"`避免xss攻击
+    - `_self`  在当前页面加载页面
+    - `_blank`  在新tab 或新窗口打开
+    - `_parent`  在当前页的父窗口打开，如果没有父窗口，则在当前页打开
+    - `_top`  在当前页的祖先窗口打开，如无父窗口，则在当前页打开
+
+#### 图片
+- `src`  定义图片资源，相当与`scrset`中的`1x`情况
+- `srcset`  提供图片资源和断点，各组之间使用逗号分隔，组内使用空格分隔`url`和`匹配情况`，可以设配多个分辨率和多种屏幕尺寸，`w`描述符匹配具体资源
+- `sizes`  定义一组图片资源的尺寸，由逗号分隔，每组由媒体查询和宽高组成，最后一组为默认，不添加媒体查询，如果当前元素没有`srcset`存在，或者其中没有`w`描述符，则该属性失效
+
+```html
+只有src属性时以src为准，当存在sizes，经媒体查询获得图片尺寸，后由设备像素密度window.devicePixelRatio*图片尺寸确定对应的图片源
+<img src="../img/480.jpg"
+     alt="responsive images"
+     srcset="../img/480.jpg 480w,../img/960.jpg 960w, ../img/1920.jpg 1920w"
+     sizes="(max-width: 375px) 300px,(max-width: 450px) 400px, 455px"
+>
+```
+
+#### audio
+作为音频的根元素(设置src)或内嵌音频资源(内嵌`<source>`，可以有多个source作为fallback),`audio`含有`audioTrackList`元素，`onaddtrack`、`onremovetrack`事件均添加在该元素上
+- `autoplay`  自动播放
+- `controls`  是否显示浏览器默认的控制面板
+- `corssorigin`  跨域设置，同`link`中的`crossorigin`
+- `loop`  是否循环播放
+- `muted`  是否静音
+- `preload`  设置缓冲
+    - `none`  不缓冲
+    - `metadata`  只缓冲文件信息
+    - `auto`  缓冲整个文件
+    
+```html
+<audio id="music" preload="auto" muted>
+    <source src="../audio/test.mp3">
+</audio>
+<script>
+  const element = document.getElementById('music')
+  element.addEventListener('loadedmetadata', () => {
+    console.log('loadedmetadata trigger')
+  })
+  element.addEventListener('canplay', () => {
+    console.log('canplay trigger')
+  })
+  element.addEventListener('playing', () => {
+    console.log('playing')
+  })
+  element.addEventListener('pause', () => {
+    console.log('pause trigger')
+  })
+  element.addEventListener('ended', () => {
+    console.log('ended trigger')
+  })
+  element.addEventListener('timeupdate', () => {
+    console.log('timeupdate trigger')
+  })
+</script>
+```
+#### video  
+视频根元素，或嵌套`<source>`元素 [mdn示例](https://github.com/iandevlin/iandevlin.github.io/tree/master/mdn/video-player)
+
+- `autoplay`  自动播放
+- `poster`  作为视频的封面
+- `playinline`  移动端视频播放经常会自动全屏，设置该属性可将视频作为行内元素放置
+#### iframe
+iframe有自己的`session history`和`document`对象
+
+- `allowfullscreen`  是否可全屏，即调用`requestFullScreen()`
+- `name`  可最为`windowName`用于区分和调用`window.open(url, windowName,[windowFeatures])`
+- `referrerpolicy`  当在该页面发生请求时，HTTP Header中`referrer Header`的值，同[A标签](#anchor)
+- `sandbox`  对框架中的内容应用额外的限制，当属性值为空是全部采用，或者使用空格分隔的形式放松部分限制
+    
+    - `allow-forms`  允许提交表单
+    - `allow-modals`  允许模态窗口包含`window.alert()`、`window.confirm()` `window.print()`、`window.prompt()`以及`beforeunload`
+    
+#### canvas  
+画布，可渲染canvas2d或者WebGL,只有`height`、`width`数值属性，通过`HTMLCanvasElement.getContext()`获取`canvas`的`context`
+```html
+<canvas id="canvas">your browser not support canvas</canvas>
+<script >
+    const canvas = document.getElementById('canvas')
+    const context = canvas.getContext('2d')
+    context.strokeStyle = '#aaaaaa'
+    context.strokeRect(10, 10, 480, 280)
+</script>
+```
+`HTMlCanvasElement.getContext(contextType，contextAttributes)`具有两个参数
+- `contextType`  画布类型
+    - `2d`  普通二位坐标画布，创建`CanvasRenderingContext2D`对象
+    - `webgl`  3d渲染画布，`WebGLRenderingContext`version1
+    - `webgl2` 3d渲染画布，`WebGL2RenderingContext` version2
+    - `bitmaprenderer` 用于渲染已有的`Imagebitmap`canvas元素，创建`ImageBitmapRenderingContext`对象
+- `contextAttributes`
+    - 当context为`2d`时，只有`alpha`,设置canvas中是否包含alpha通道，如果设置为false，可加速canvas运行效率
+    - 当context为`webgl`时，包含一下选项    
+    
+        - `alpha`  是否包含alpha通道
+        - `antialias`  是否抗锯齿
+        - `depth`   色深是否达到16bit
+        - `failIfMajorPerformanceCaveat`  当系统性能较差时，是否创建context
+        - `powerPreference`  GPU的性能设置
+        - `premultipliedAlpha`  //TODO
+        - `preserveDrawingBuffer`  //TODO
+        - `stencil`  //TODO
+- `CanvasRenderingContext2D` API
+    - `clearRect` 清除一块矩形区域，以`point`和`size`为参数
+    - `fillRect`  以当前`fillStyle`填充一块区域
+    - `strokeRect`  为给定的矩形区域描边  
+    - `rect`  生成一个矩形path,不会直接绘制，可用于fill和stroke
+        ```html
+          <script>
+              const context = document.querySelector('canvas').getContext('2d')
+              context.fillStyle = 'red'
+              context.fillRect(0,0,200,100)
+              context.strokeStyle = 'blue'
+              context.strokeRect(10,10,180,80)
+              context.clearRect(20,20,160,60)
+          </script>
+        ```
+    - `fillText`  在画布上填充文本，(text,x,y,\[maxWidth])
+    - `stokeText`  字体描边
+    - `measureText`  测量指定字符串的长度
+    - `beginPath`  创建一个新的路径
+    - `closePath`  闭合路径，若原路径已闭合，则不做处理
+    - `arc`  画圆弧,不会改变当前点位置
+    - `arcTo`   根据当前点和两个控制点画圆弧，会改变当前点的位置
+    - `isPointInPath`  判定指定点是否在指定的path区域内
+    ```html
+    <script>
+        const canvas = document.getElementById('canvas')
+        const context = canvas.getContext('2d')
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        const path = new Path2D()
+        path.rect(10, 10, 180, 80)
+        context.strokeStyle = '#aaa'
+        context.stroke(path)
+        canvas.addEventListener('mousemove', function(event) {
+            if (context.isPointInPath(path, event.clientX, event.clientY)) {
+                context.fillStyle = 'red'
+            } else {
+                context.fillStyle = 'transparent'
+            }
+            context.clearRect(0, 0, canvas.width, canvas.height)
+            context.fill(path)
+            context.stroke(path)
+        })
+    
+    
+    </script>
+
+    ```
+    - `isPintInStroke`  判定指定点是否在指定的描边区域内
+    - `clip` 对区域裁剪
+    ```html
+        // clip策略默认nonzero，即相交区域重叠，evenodd：相交区域镂空
+        const canvas = document.getElementById('canvas')
+        const context = canvas.getContext('2d')
+        const path = new Path2D()
+        path.rect(80, 10, 29, 130)
+        path.rect(40, 50, 100, 50)
+        context.clip(path, 'evenodd')
+        context.fillStyle = 'blue'
+        context.fillRect(0, 0, canvas.width, canvas.height)
+    ```
+    - `save`  保存当前的样式设置
+    - `restore`  恢复之前保存的样式设置
+    ```html
+        const canvas = document.getElementById('canvas')
+        const context = canvas.getContext('2d')
+        context.fillStyle = 'red'
+        context.save()
+        context.fillStyle = 'blue'
+        context.fillRect(0, 0, 50, 50)
+        context.restore()
+        context.fillRect(50, 50, 50, 50)
+    ```
+    - `drawImage`  在画布上绘制图片
+    - `getImageData`  返回一个`ImageData`对象
+    ...
+    
+#### form
+表单元素，用户交互和提交信息
+- `acttion`  表单提交URL
+- `autocomplete`  自动完成表单项填充
+- `enctype`  表单`method`为`post`时，`enctype`用于指定提交内容的`MIME`类型，包含`application/x-www-form-urlencoded`(默认类型)、`multipart/form-data`(上传文件)、`text/plain`(文本类型)
+- `method`  http method,包括`post`、`get`、`dialog`
+- `novalidate`  是否不校验表单
+- `target`  提交后的呈现形似，同`<a>`中target，附加`iframe`name可选，
+
+#### input
+input是html中交互的最主要元素，在不同设备下具有大量可选类型
+- `text`  最基本类型，输入字符
+- `button`  基本按钮
+- `checkbox`  多选 
+- `color`  颜色选择器
+- `date`  日期选择器
+- `date-local`  当地时区日期
+- `file`  文件选择
+- `password`  密码输入
+- `range`  范围选择器
+- `time`  时间选择器
+- `submit`  提交按钮
+- `reset`  表单重置
 
 #### properties
