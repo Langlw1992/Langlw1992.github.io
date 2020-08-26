@@ -5,22 +5,140 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./public/style/index.css">
-    <title>Lang</title>
+    <meta name="Keywords" content="ztwzero NMSL">
+    <title>ztwzero NMSL 测试专用页面</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .video-x {
+            position: relative;
+            width: 100vw;
+            margin: auto;
+            line-height: 100vh;
+            text-align: center;
+            font-size: 80px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .canvas-barrage {
+            left: 0;
+            top: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-placeholder {
+            height: 100vh;
+            background-color: #000;
+            animation: bgColor 10s infinite alternate;
+        }
+
+        @keyframes bgColor {
+            25% {
+                background-color: darkred;
+            }
+            50% {
+                background-color: darkgreen;
+            }
+            75% {
+                background-color: darkblue;
+            }
+            100% {
+                background-color: silver;
+            }
+        }
+    </style>
 </head>
 <body>
-<nav>
-    <div class="wrapper nav df">
-        <div class="nav-item">Home</div>
-        <div class="nav-item">Blog</div>
-        <div class="nav-item">About</div>
+<div class="container">
+    <div class="video-x">
+        <canvas id="canvasBarrage" class="canvas-barrage"></canvas>
+        <div class="video-placeholder">ztwzero NMSL</div>
     </div>
-</nav>
-<main class="content df">
-    <div class="wrapper ctn">
-        <div class="half left"></div>
-        <div class="half right"></div>
-    </div>
-</main>
+</div>
+<script src="./public/script/canvasBarrage.js"></script>
+<script>
+    const width = window.innerWidth
+    const height = window.innerHeight
+    const canvas = document.getElementById('canvasBarrage')
+    canvas.setAttribute('width', `${width}`)
+    canvas.setAttribute('height', `${height}`)
+    let data = Object.keys(Array(10000).fill(0)).map(() => ({
+        value: 'ztwzero NMSL',
+        color: '#' + (Math.random() * 0xffffff << 0).toString(16),
+        range: [0.1, 1]
+    }))
+    const canvasBarrage = function (canvas, data) {
+        if (typeof canvas == 'string') {
+            canvas = document.querySelector(canvas)
+            canvasBarrage(canvas, data)
+            return
+        }
+        let context = canvas.getContext('2d')
+        canvas.width = canvas.clientWidth
+        canvas.height = canvas.clientHeight
+        let store = {}
+        let fontSize = Math.floor(40 * Math.random())
+        let Barrage = function (obj, index) {
+            this.x = (1 + 0.05 * Math.random()) * canvas.width
+            this.y = obj.range[0] * canvas.height + (obj.range[1] - obj.range[0]) * canvas.height * Math.random() + 36
+            if (this.y < fontSize) {
+                this.y = fontSize
+            } else if (this.y > canvas.height - fontSize) {
+                this.y = canvas.height - fontSize
+            }
+            this.moveX = 1 + Math.random() * 3
+            this.opacity = 0.8 + 0.2 * Math.random()
+            this.params = obj
+            this.draw = function () {
+                let params = this.params
+                context.strokeStyle = params.color
+                context.font = 'bold ' + fontSize + 'px "microsoft yahei", sans-serif'
+                context.fillStyle = 'rgba(255,255,255,' + this.opacity + ')'
+                context.fillText(params.value, this.x, this.y)
+                context.strokeText(params.value, this.x, this.y)
+            }
+        }
+
+        data.forEach(function (obj, index) {
+            store[index] = new Barrage(obj, index)
+        })
+
+        const draw = function () {
+            for (let index in store) {
+                let barrage = store[index]
+                barrage.x -= barrage.moveX
+                if (barrage.x < -1 * canvas.width * 1.5) {
+                    barrage.x = (1 + index * 0.1 / Math.random()) * canvas.width
+                    barrage.y = (barrage.params.range[0] + (barrage.params.range[1] - barrage.params.range[0]) * Math.random()) * canvas.height
+                    if (barrage.y < fontSize) {
+                        barrage.y = fontSize
+                    } else if (barrage.y > canvas.height - fontSize) {
+                        barrage.y = canvas.height - fontSize
+                    }
+                    barrage.moveX = 1 + Math.random() * 20                }
+                store[index].draw()
+            }
+        }
+        const render = function () {
+            context.clearRect(0, 0, canvas.width, canvas.height)
+            draw()
+            requestAnimationFrame(render)
+        }
+        render()
+    }
+    canvasBarrage('#canvasBarrage', data)
+    function feb(a){
+        if(a>10000){
+            return
+        }
+        return
+    }
+</script>
 </body>
 </html>
