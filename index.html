@@ -8,11 +8,12 @@
     <meta name="Keywords" content="ztwzero NMSL">
     <title>ztwzero NMSL 测试专用页面</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         .video-x {
             position: relative;
             width: 100vw;
@@ -57,7 +58,7 @@
 <body>
 <div class="container">
     <div class="video-x">
-        <canvas id="canvasBarrage" class="canvas-barrage"></canvas>
+        <canvas id="canvasBarrage" class="canvas-barrage">ztwzero nmsl</canvas>
         <div class="video-placeholder">ztwzero NMSL</div>
     </div>
 </div>
@@ -67,10 +68,10 @@
     const canvas = document.getElementById('canvasBarrage')
     canvas.setAttribute('width', `${width}`)
     canvas.setAttribute('height', `${height}`)
-    let data = Object.keys(Array(10000).fill(0)).map(() => ({
+    let data = Object.keys(Array(1000).fill(0)).map(() => ({
         value: 'ztwzero NMSL',
         color: '#' + (Math.random() * 0xffffff << 0).toString(16),
-        range: [0.1, 1]
+        range: [0, 1]
     }))
     const canvasBarrage = function (canvas, data) {
         if (typeof canvas == 'string') {
@@ -79,12 +80,10 @@
             return
         }
         let context = canvas.getContext('2d')
-        canvas.width = canvas.clientWidth
-        canvas.height = canvas.clientHeight
-        let store = {}
-        let fontSize = Math.floor(40 * Math.random())
-        let Barrage = function (obj, index) {
-            this.x = (1 + 0.05 * Math.random()) * canvas.width
+        let store = []
+        let Barrage = function (obj) {
+            let fontSize = 20 + Math.floor(40 * Math.random())
+            this.x = (1 + .1 * Math.random()) * canvas.width
             this.y = obj.range[0] * canvas.height + (obj.range[1] - obj.range[0]) * canvas.height * Math.random() + 36
             if (this.y < fontSize) {
                 this.y = fontSize
@@ -96,9 +95,9 @@
             this.params = obj
             this.draw = function () {
                 let params = this.params
-                context.strokeStyle = params.color
                 context.font = 'bold ' + fontSize + 'px "microsoft yahei", sans-serif'
-                context.fillStyle = 'rgba(255,255,255,' + this.opacity + ')'
+                context.strokeStyle = 'rgba(255,255,255,' + this.opacity + ')'
+                context.fillStyle = params.color
                 context.fillText(params.value, this.x, this.y)
                 context.strokeText(params.value, this.x, this.y)
             }
@@ -109,19 +108,19 @@
         })
 
         const draw = function () {
-            for (let index in store) {
-                let barrage = store[index]
+            for (let bar of store) {
+                let barrage = bar
                 barrage.x -= barrage.moveX
                 if (barrage.x < -1 * canvas.width * 1.5) {
-                    barrage.x = (1 + index * 0.1 / Math.random()) * canvas.width
-                    barrage.y = (barrage.params.range[0] + (barrage.params.range[1] - barrage.params.range[0]) * Math.random()) * canvas.height
-                    if (barrage.y < fontSize) {
-                        barrage.y = fontSize
-                    } else if (barrage.y > canvas.height - fontSize) {
-                        barrage.y = canvas.height - fontSize
+                    barrage.x = (1 + 0.1 / Math.random()) * canvas.width
+                    if (barrage.y < bar.fontSize) {
+                        barrage.y = bar.fontSize
+                    } else if (barrage.y > canvas.height - bar.fontSize) {
+                        barrage.y = canvas.height - bar.fontSize
                     }
-                    barrage.moveX = 1 + Math.random() * 20                }
-                store[index].draw()
+                    barrage.moveX = 1 + Math.random() * 20
+                }
+                bar.draw()
             }
         }
         const render = function () {
@@ -132,12 +131,6 @@
         render()
     }
     canvasBarrage('#canvasBarrage', data)
-    function feb(a){
-        if(a>10000){
-            return
-        }
-        return
-    }
 </script>
 </body>
 </html>
